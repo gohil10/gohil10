@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+<body>
+	<header id="header">
+		SIP Calculator
+	</header>
+	<header id="header">
+		<a href="./about.html">
+			About
+		</a>
+	</header>
+	<main id="main">
+		<form id="form" style="max-width: 380px;">
+			<div style="margin-block: 4px;">
+				<label for="principal" style="display: block;">
+					Principal amount
+				</label>
+				<input type="text" id="principal" />
+			</div>
+			<div style="margin-block: 4px;">
+				<label for="interestRate" style="display: block;">
+					Rate of interest (%)
+				</label>
+				<input type="text" id="interestRate" />
+			</div>
+			<div style="margin-block: 4px;">
+				<label for="timePeriod" style="display: block;">
+					Time period
+				</label>
+				<input type="text" id="timePeriod" />
+			</div>
+			<div>
+				<button type="submit" id="submit">Calculate</button>
+			</div>
+		</form>
+		<br />
+		<div id='results'></div>
+	</main>
+</body>
+<script type="text/javascript">
+	let principal = document.getElementById("principal");
+	let interestRate = document.getElementById("interestRate");
+	let timePeriod = document.getElementById("timePeriod");
+	let form = document.getElementById("form");
+	let results = document.getElementById("results");
+
+	form.addEventListener("submit", (e) => {
+		  e.preventDefault();
+
+		  const res = sipCalculator(principal.value, interestRate.value, timePeriod.value);
+		  const res2 = investedAmount(principal.value, timePeriod.value);
+		  results.innerHTML = `<h3 style="margin:0;">Invested: ${res2}</h3><h3 style="margin:0;">Returns: ${Number(res).toFixed(2)}</h3>`
+	});
+
+	function sipCalculator(principal, interestRate, timePeriod) {
+		let errorMessage = '';
+
+		if (isNaN(principal)) {
+			errorMessage = 'Principal must be a number';
+			return errorMessage;
+		} else if (isNaN(interestRate)) {
+			errorMessage = 'Interest Rate must be a number';
+			return errorMessage;
+		} else if (isNaN(timePeriod)) {
+			errorMessage = 'Time Period must be a number';
+			return errorMessage;
+		}
+
+		const i = (interestRate / 100) / 12;
+		const n = 12 * timePeriod;
+		let x = (Math.pow((1 + i), n) - 1) / i;
+
+    	return principal * x * (1 + i);
+	}
+
+	function investedAmount(principal, timePeriod) {
+		let errorMessage = '';
+
+		if (isNaN(principal)) {
+			errorMessage = 'Principal must be a number';
+			return errorMessage;
+		} else if (isNaN(timePeriod)) {
+			errorMessage = 'Time Period must be a number';
+			return errorMessage;
+		}
+
+		return Math.round(principal * timePeriod * 12);
+	}
+</script>
+
+</html>
